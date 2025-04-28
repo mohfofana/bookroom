@@ -1,0 +1,35 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+
+# Ignore les fichiers de configuration de l'IDE (Android Studio, IntelliJ)
+.idea/
+
+# Ignore les fichiers de build
+/build/
+*.apk
+*.aab
+
+# Ignore les fichiers de configuration de Gradle
+gradle-wrapper.jar
+gradle-wrapper.properties
+gradlew
+gradlew.bat
+settings.gradle.kts
+
+# Ignore les fichiers de test d'exemple
+app/src/androidTest/java/com/example/easybooking/ExampleInstrumentedTest.kt
+app/src/test/java/com/example/easybooking/ExampleUnitTest.kt
