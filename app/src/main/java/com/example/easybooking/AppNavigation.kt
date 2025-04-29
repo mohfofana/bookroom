@@ -5,9 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.easybooking.MainScreen
-import com.example.easybooking.ReserverSalleScreen
 import com.example.easybooking.SallesScreen
-
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
@@ -21,7 +19,10 @@ fun AppNavigation(navController: NavHostController) {
         composable("reserversalle/{salleId}") { backStackEntry ->
             val salleId = backStackEntry.arguments?.getString("salleId")?.toIntOrNull()
             if (salleId != null) {
-                ReserverSalleScreen(salleId)
+                ReserverSalleScreen(
+                    salleId = salleId,
+                    navController = navController
+                )
             }
         }
     }

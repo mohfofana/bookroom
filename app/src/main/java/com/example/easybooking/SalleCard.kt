@@ -1,13 +1,21 @@
 package com.example.easybooking
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -25,16 +33,28 @@ fun SalleCard(salle: Salle, navController: NavController) {
 
     Card(
         modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        shape = RoundedCornerShape(12.dp)
+            .padding(10.dp)
+            .fillMaxWidth()
+            .height(320.dp)
+            .shadow(
+                elevation = 8.dp,
+                shape = RoundedCornerShape(16.dp),
+                spotColor = Color(0x40000000)
+            ),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f)
+        )
     ) {
         Column {
-            // Image de couverture
+            // Image avec overlay gradient
             Box(
                 modifier = Modifier
-                    .height(120.dp)
+                    .height(160.dp)
                     .fillMaxWidth()
             ) {
                 Image(
@@ -44,89 +64,150 @@ fun SalleCard(salle: Salle, navController: NavController) {
                     modifier = Modifier.fillMaxSize()
                 )
 
-                // Badge de disponibilité
-                val backgroundColor = if (salle.disponible) {
-                    Color(0xFF4CAF50)
-                } else {
-                    Color(0xFFE53935)
-                }
+                // Gradient overlay
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    Color.Black.copy(alpha = 0.5f)
+                                ),
+                                startY = 0f,
+                                endY = 450f
+                            )
+                        )
+                )
 
+                // Badge de disponibilité
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(8.dp)
-                        .background(
-                            color = backgroundColor,
-                            shape = RoundedCornerShape(4.dp)
+                        .padding(12.dp)
+                ) {
+                    val statusColor = if (salle.disponible) {
+                        MaterialTheme.colorScheme.tertiary
+                    } else {
+                        Color(0xFFE53935)
+                    }
+
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = statusColor.copy(alpha = 0.9f),
+                        modifier = Modifier.shadow(4.dp, CircleShape)
+                    ) {
+                        Text(
+                            text = if (salle.disponible) "Disponible" else "Occupée",
+                            color = Color.White,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                         )
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                    }
+                }
+
+                // Nom de la salle sur l'image
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .fillMaxWidth()
+                        .padding(12.dp)
                 ) {
                     Text(
-                        text = if (salle.disponible) "Disponible" else "Occupée",
+                        text = salle.nom,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
                         color = Color.White,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
 
             Column(
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(16.dp, 24.dp)
             ) {
-                Text(
-                    text = salle.nom,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Text(
-                    text = "Capacité: ${salle.capacite} personnes",
-                    fontSize = 14.sp,
-                    color = Color.Gray,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(bottom = 8.dp)
                 ) {
-                    // Bouton Infos
-                    Button(
-                        onClick = { showDialog = true },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.secondary
-                        ),
-                        shape = RoundedCornerShape(10.dp),
-                        contentPadding = PaddingValues(vertical = 6.dp)
+                    // Icône de capacité
+                    Surface(
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        modifier = Modifier.size(32.dp)
                     ) {
-                        Text(
-                            "Infos",
-                            fontSize = 12.sp
-                        )
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                Icons.Default.Info,
+                                contentDescription = "Capacité",
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))
+
+                    Text(
+                        text = "Capacité: ${salle.capacite} personnes",
+                        fontSize = 15.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // Bouton Infos
+                    OutlinedButton(
+                        onClick = { showDialog = true },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(12.dp),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)),
+                        contentPadding = PaddingValues(vertical = 16.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.Info,
+                            contentDescription = "Informations",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            "Détails",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
 
                     // Bouton Réserver
                     Button(
                         onClick = { navController.navigate("reserversalle/${salle.id}") },
                         modifier = Modifier.weight(1f),
                         enabled = salle.disponible,
+                        shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary,
-                            disabledContainerColor = Color.Gray
+                            disabledContainerColor = Color.Gray.copy(alpha = 0.6f)
                         ),
-                        shape = RoundedCornerShape(10.dp),
-                        contentPadding = PaddingValues(vertical = 6.dp)
+                        contentPadding = PaddingValues(vertical = 16.dp)
                     ) {
+                        Icon(
+                            Icons.Default.DateRange,
+                            contentDescription = "Réserver",
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             "Réserver",
-                            fontSize = 12.sp
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
                 }
