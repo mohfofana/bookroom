@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.easybooking.MainScreen
+import com.example.easybooking.ReservationsScreen
 import com.example.easybooking.SallesScreen
 
 @Composable
@@ -25,5 +26,6 @@ fun AppNavigation(navController: NavHostController) {
                 )
             }
         }
+        composable("reservations") { ReservationsScreen(navController) }
     }
 }

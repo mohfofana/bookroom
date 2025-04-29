@@ -87,9 +87,9 @@ fun SalleCard(salle: Salle, navController: NavController) {
                         .padding(12.dp)
                 ) {
                     val statusColor = if (salle.disponible) {
-                        MaterialTheme.colorScheme.tertiary
+                        Color(0xFF4CAF50) // Vert clair (Material Green 500)
                     } else {
-                        Color(0xFFE53935)
+                        Color(0xFFE53935) // Rouge vif (Material Red 600)
                     }
 
                     Surface(
@@ -106,6 +106,7 @@ fun SalleCard(salle: Salle, navController: NavController) {
                         )
                     }
                 }
+
 
                 // Nom de la salle sur l'image
                 Box(

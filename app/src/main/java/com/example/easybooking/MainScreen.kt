@@ -150,12 +150,29 @@ fun MainScreen(navController: NavController) {
                 )
             ) {
                 Text(
-                    text = "Voir les salles disponibles",
+                    "Voir les salles disponibles",
                     fontSize = 16.sp,
                     color = Color.White
                 )
             }
 
+            OutlinedButton(
+                onClick = { navController.navigate("reservations") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    "Mes réservations",
+                    fontSize = 16.sp
+                )
+            }
         }
     }
 }
